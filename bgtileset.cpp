@@ -463,7 +463,6 @@ void BGTileSet::setActiveTileData(uint new_value, bool vFlip, bool hFlip, uint p
 
 void BGTileSet::setActiveTilePixel(int x, int y, int value)
 {
-    //int pixel_num  = x + (y*8);
     unsigned short tileData = *((unsigned short*)&TileSet[(active_tile*8)+((active_y + (active_x<<1))*2)]);
     ushort tile_num = tileData & 0x3FF;
     std::vector<uchar>::iterator activeBGData;
@@ -477,7 +476,6 @@ void BGTileSet::setActiveTilePixel(int x, int y, int value)
     {
         activeBGData = BGTileData.begin()+(tile_num*0x20)-0x1000;
     }
-    //active_data[getActiveTileIndex(tileData&0x3FF)].data;
     bool vFlip = (tileData&0x8000)!= 0;
     bool hFlip = (tileData&0x4000)!= 0;
     int y_off = y;
@@ -504,7 +502,6 @@ void BGTileSet::setActiveTilePixel(int x, int y, int value)
     {
         redo_stack.pop();
     }
-    //int shift = 7-x;
     if((value&0b0001)!= 0)
     {
         activeBGData[y_off*2] |= (bitmask);
@@ -539,11 +536,11 @@ void BGTileSet::setActiveTilePixel(int x, int y, int value)
     }
 }
 
-void BGTileSet::copyTile(uint old_tile_number, uint new_tile_number)
+void BGTileSet::copyBGTile(uint old_tile_number, uint new_tile_number)
 {
     unsigned int old_tile_index = (old_tile_number * 0x20);
     unsigned int new_tile_index = (new_tile_number * 0x20);
-    std::vector<uchar>::iterator old_it;//, end_old_it;
+    std::vector<uchar>::iterator old_it;
     std::vector<uchar>::iterator new_it;
     if(!BGTileData2.empty() &&
             (old_tile_index >= 0x3000 &&
@@ -555,7 +552,6 @@ void BGTileSet::copyTile(uint old_tile_number, uint new_tile_number)
     {
         old_it = BGTileData.begin()+old_tile_index;
     }
-    //end_old_it = old_it + 0x20;
     if(!BGTileData2.empty() &&
             (new_tile_index >= 0x3000 &&
             (new_tile_index - 0x3000) < (m_BG2TransferSize)))
@@ -573,6 +569,21 @@ void BGTileSet::copyTile(uint old_tile_number, uint new_tile_number)
         redo_stack.pop();
     }
     std::copy(old_it, old_it+0x20, new_it);
+}
+
+void BGTileSet::copyTile(uint old_index, uint new_index)
+{
+    unsigned int old_tile_index = (old_index * 8);
+    unsigned int new_tile_index = (new_index * 8);
+    std::vector<uchar>::iterator old_it = (TileSet.begin() + old_tile_index);
+    std::vector<uchar>::iterator new_it = (TileSet.begin() + new_tile_index);
+    UndoStack::UndoEntry u = {UndoStack::TILESET_EDIT, new_index*8, std::vector<uchar>(new_it, new_it+8) };
+    undo_stack.push(u);
+    while(!redo_stack.empty())
+    {
+        redo_stack.pop();
+    }
+    std::copy(old_it, old_it+8, new_it);
 }
 
 void BGTileSet::undoLastEdit()

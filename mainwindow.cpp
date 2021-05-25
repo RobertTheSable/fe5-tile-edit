@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->paletteLabel, &TileSetLabel::clicked, this, &MainWindow::selectColor);
     connect(ui->rawTileEditLabel, &TileSetLabel::clicked, this, &MainWindow::editActiveTile);
     connect(ui->rawTilesLabel, &TileSetLabel::released, this, &MainWindow::dragBGTile);
+    connect(ui->tileSetLabel, &TileSetLabel::released, this, &MainWindow::dragMainTile);
 }
 
 MainWindow::~MainWindow()
@@ -128,10 +129,6 @@ void MainWindow::setTileFocus(int x, int y)
 
 void MainWindow::selectTileFromBank(int x, int y)
 {
-//    if(!(y == 39 && (x == 10 || x== 15)))
-//    {
-//        int test  = x+y;
-//    }
     int tile_index = x+(y*16);
     m_Tilesets[ui->chapterSpinBox->value()-1].setActiveTileData(tile_index, ui->tileVFlipCheckBox->isChecked(), ui->tileHFlipCheckBox->isChecked(), ui->tilePalletteSpinBox->value());
     updateTileDisplay();
@@ -173,9 +170,18 @@ void MainWindow::selectColor(int x, int y)
 
 void MainWindow::dragBGTile(int old_x, int old_y, int new_x, int new_y)
 {
-    m_Tilesets[current_chapter-1].copyTile(old_x + (old_y*16), new_x + (new_y*16));
+    m_Tilesets[current_chapter-1].copyBGTile(old_x + (old_y*16), new_x + (new_y*16));
     updateBGTilesetDisplay();
     m_Tilesets[current_chapter-1].setActive_tile(m_Tilesets[current_chapter-1].getActive_tile());
+    updateTilesetDisplay();
+    updateTileDisplay();
+    updateBGTileDisplay();
+}
+
+void MainWindow::dragMainTile(int old_x, int old_y, int new_x, int new_y)
+{
+    m_Tilesets[current_chapter-1].copyTile(old_x + (old_y*32), new_x + (new_y*32));
+    updateBGTilesetDisplay();
     updateTilesetDisplay();
     updateTileDisplay();
     updateBGTileDisplay();

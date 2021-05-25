@@ -73,7 +73,9 @@ public:
 
     void setActiveTileData(uint value, bool vFlip, bool hFlip, uint palette);
     void setActiveTilePixel(int x, int y, int value);
+    void copyBGTile(uint old_index, uint new_index);
     void copyTile(uint old_index, uint new_index);
+
     void undoLastEdit();
     void redoLastEdit();
 

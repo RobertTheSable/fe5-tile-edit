@@ -28,6 +28,7 @@ private slots:
     void editActiveTile(int x, int y);
     void selectColor(int x, int y);
     void dragBGTile(int old_x, int old_y, int new_x, int new_y);
+    void dragMainTile(int old_x, int old_y, int new_x, int new_y);
 
     //void setMainCursor();
     void on_chapterSetButton_clicked();
