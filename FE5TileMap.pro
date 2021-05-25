@@ -47,3 +47,9 @@ FORMS += \
         mainwindow.ui \
     exportbindialog.ui \
     opendirdialog.ui
+
+inifiles.commands = $(COPY_DIR) $$shell_path($$PWD/ini) $$shell_path($$OUT_PWD)
+first.depends = $(first) inifiles
+export(first.depends)
+export(inifiles.commands)
+QMAKE_EXTRA_TARGETS += first inifiles
