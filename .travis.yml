@@ -2,14 +2,24 @@ language: cpp
 jobs:
   include:
   - os: osx
-    before_install:
-        - brew install qt5
+    osx_image: xcode12.5
+    addons:
+        homebrew:
+            update: true
+            packages:
+                - qt5
     compiler: clang
+    before_install:
+        - brew link qt5 --force
     script:
             - mkdir -p build
             - cd build
-            - qmake ../src/FE5TileMap.pro
-            - make
+            - qmake -spec macx-xcode ../src/FE5TileMap.pro
+            - xcodebuild -list -project FE5TileMap.xcodeproj
+            - xcodebuild -scheme FE5TileMap build
+    after_success:
+        - ls
+        - ls build/
   - os: linux
     dist: focal
     addons:
@@ -23,3 +33,4 @@ jobs:
           - cd build
           - qmake ../src/FE5TileMap.pro
           - make
+          
