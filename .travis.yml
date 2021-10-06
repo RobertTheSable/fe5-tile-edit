@@ -1,0 +1,16 @@
+os: linux
+dist: focal
+language: cpp
+addons:
+    apt:
+        update: true
+        packages:
+            -  qt5-default
+        compiler:
+            - gcc
+
+script:
+    - mkdir -p build
+    - cd build
+    - qmake ../src/FE5TileMap.pro
+    - make
