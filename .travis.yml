@@ -1,16 +1,25 @@
-os: linux
-dist: focal
 language: cpp
-addons:
-    apt:
-        update: true
-        packages:
-            -  qt5-default
-        compiler:
-            - gcc
-
-script:
-    - mkdir -p build
-    - cd build
-    - qmake ../src/FE5TileMap.pro
-    - make
+jobs:
+  include:
+  - os: osx
+    before_install:
+        - brew install qt5
+    compiler: clang
+    script:
+            - mkdir -p build
+            - cd build
+            - qmake ../src/FE5TileMap.pro
+            - make
+  - os: linux
+    dist: focal
+    addons:
+          apt:
+              update: true
+              packages:
+                  -  qt5-default
+    compiler: gcc
+    script:
+          - mkdir -p build
+          - cd build
+          - qmake ../src/FE5TileMap.pro
+          - make
