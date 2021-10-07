@@ -47,6 +47,3 @@ FORMS += \
         mainwindow.ui \
     exportbindialog.ui \
     opendirdialog.ui
-
-QMAKE_POST_LINK += $$quote($(COPY_DIR) $$shell_path($$PWD/ini) $$OUT_PWD/$(DESTDIR))
-

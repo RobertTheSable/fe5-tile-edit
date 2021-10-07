@@ -16,7 +16,7 @@ jobs:
             - cd build
             - qmake -spec macx-xcode ../src/FE5TileMap.pro
             - xcodebuild -list -project FE5TileMap.xcodeproj
-            - xcodebuild -scheme FE5TileMap build
+            - xcodebuild -scheme FE5TileMap -configuration Release build
     after_success:
         - ls
         - ls build/
