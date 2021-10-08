@@ -53,7 +53,6 @@ win32: {
     ini_cpy.commands = $$quote($(COPY_DIR) $$shell_path($$PWD/ini) $$OUT_PWD/$(DESTDIR))
     QMAKE_EXTRA_TARGETS += ini_cpy
 }
-message($${QMAKESPEC})
 
 unix:!macx {
     target.path += /usr/local/bin
