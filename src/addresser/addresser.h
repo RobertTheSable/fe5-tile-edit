@@ -40,7 +40,7 @@ public:
     static const romState misc_fail = 16;
     
     static const unsigned int REVISION =  0x80FFDB; 
-    RomMap(std::string fileName);
+    RomMap(const std::string& fileName, const std::string& iniPath = "");
     RomMap();
     int getAddress(std::string label) const;
     int getPCAddress(std::string label, bool headered = false) const;

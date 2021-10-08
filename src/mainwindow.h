@@ -19,7 +19,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+public slots:
+    void show();
 private slots:
     void on_actionOpen_triggered();
     void setTileFocus(int x, int y);

@@ -2,9 +2,11 @@
 #include "ui_mainwindow.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QErrorMessage>
 #include <QPainter>
 #include <QFile>
 #include <QTextStream>
+#include <QStandardPaths>
 #include <vector>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -39,6 +41,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::show()
+{
+    QMainWindow::show();
+    auto iniPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, INI_DIR, QStandardPaths::LocateDirectory);
+    if (iniPath == "") {
+        QMessageBox::critical(
+                    NULL,
+                    tr("Error"),
+                    tr("The ini folder was not found - this folder is needed for the application to function.")
+                    );
+        close();
+    }
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     QString filename = QFileDialog::getOpenFileName(this, "Open ROM", QDir::currentPath(), tr("SNES Roms (*.sfc *.smc)"));
@@ -48,7 +64,8 @@ void MainWindow::on_actionOpen_triggered()
             m_Tilesets.pop_back();
         }
         std::string text = filename.toStdString();
-        m_RomMap = RomMap(text);
+        auto iniPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, INI_DIR, QStandardPaths::LocateDirectory);
+        m_RomMap = RomMap(text, iniPath.toStdString());
         if(m_RomMap.getMyState() == RomMap::rom_ok)
         {
             for(int i = 0; i < 37; i++)

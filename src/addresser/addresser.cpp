@@ -42,7 +42,7 @@ RomMap::RomMap()
     
 }
 
-RomMap::RomMap(std::string fileName)
+RomMap::RomMap(const std::string& fileName, const std::string& basePath)
 {
     myState = rom_ok;
     std::ifstream input_rom(fileName, std::ios::binary | std::ios::ate);
@@ -96,11 +96,15 @@ RomMap::RomMap(std::string fileName)
             }
             if(myState == rom_ok)
             {
-                std::string ini_name = std::string(INI_DIR) + std::string(internalHeader.name, 21);
+                std::string ini_name;
+                if (basePath != "") {
+                    ini_name = basePath + std::string(internalHeader.name, 21);
+                } else {
+                    ini_name = std::string(INI_DIR) + std::string(internalHeader.name, 21);
+                }
                 std::stringstream ini_stream(ini_name.erase(ini_name.find_last_not_of(" ")+1), std::ios_base::ate|std::ios_base::out);
                 ini_stream << " 1." << (int)internalHeader.version  << ".ini";
                 ini_name = ini_stream.str();
-                //std::cout << ini_name << std::endl;
                 
                 std::ifstream input_ini(ini_name);
                 if(input_ini)

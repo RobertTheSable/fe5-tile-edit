@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -47,3 +48,24 @@ FORMS += \
         mainwindow.ui \
     exportbindialog.ui \
     opendirdialog.ui
+
+win32: {
+    ini_cpy.commands = $$quote($(COPY_DIR) $$shell_path($$PWD/ini) $$OUT_PWD/$(DESTDIR))
+    QMAKE_EXTRA_TARGETS += ini_cpy
+}
+message($${QMAKESPEC})
+
+unix:!macx {
+    target.path += /usr/local/bin
+    ini.path    = /user/local/share/$${TARGET}/ini
+    ini.files   = ini/*
+    INSTALLS    += ini target
+    ini_cpy.commands = $$quote($(COPY_DIR) $$shell_path($$PWD/ini) $$OUT_PWD/$(DESTDIR))
+    QMAKE_EXTRA_TARGETS += ini_cpy
+}
+
+macx: {
+    ini.path    = Contents/Resources
+    ini.files   = ini/
+    QMAKE_BUNDLE_DATA += ini
+}

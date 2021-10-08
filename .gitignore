@@ -2,7 +2,7 @@ release/
 debug/
 Release/
 Debug/
-build/
+build*/
 
 # C++ objects and libs
 *.slo
@@ -58,4 +58,7 @@ compile_commands.json
 *creator.user*
 
 *_qmlcache.qrc
+
+*.directory
+*.DS_Store
 
